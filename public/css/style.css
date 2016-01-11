@@ -1,0 +1,55 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.fill {
+  min-height: 100%;
+  height: 100%;
+}
+
+#messages-container {
+  min-height: 250px;
+}
+
+#messages {
+}
+
+#messages thead th:nth-child(1) {
+  width: 80px;
+}
+
+#messages tbody td:nth-child(1) {
+  font-size:16px;  
+} 
+
+#messages thead th:nth-child(2) {
+  width: 85px;   
+} 
+
+#messages thead th:nth-child(3) {
+  word-wrap: break-word; 
+} 
+
+#m {
+  width: 100%;
+}
+
+.chat-form fieldset {
+  margin: 25px 0 0 0;
+}
+
+.chat-form fieldset label {
+  display: block;
+}
+
+.chat-form fieldset:nth-child(1) {
+  margin: 0;
+}
+
+
+.chat-form .action {
+  margin: 25px 0 0 0;
+}

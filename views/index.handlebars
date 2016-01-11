@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Socket.IO chat</title>
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/jquery-2.1.4.min.js"></script>
+  <script src="/bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-info alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>Note:</strong> Colour of debug info icon represents which WSS (web socket server) the client is connected to. In other words if you are load-balancing between multiple Azure Web Apps you should see different colours.
+        </div>        
+      </div>
+    </div>
+    <div class="row">
+      <div id="messages-container" class="panel pre-scrollable col-md-9">      
+        <table id="messages" class="table table-striped table-hover">
+          <thead>
+            <th>Debug</th>
+            <th>User</th>
+            <th>Message</th>
+          </thead>
+          <tbody id="messages-body">        
+          </tbody>
+        </table>      
+      </div>
+      <div class="col-md-3">
+        <div class="well">
+          <form action="" class="chat-form">
+            <fieldset class="nick">
+              <label for="nick">Nickname</label>
+              <input id="nick" autocomplete="on" value="{{sample_nickname}}" maxlength="12" />
+            </fieldset>
+            <fieldset class="message">
+              <label for="m">Message</label>
+              <input id="m" autocomplete="off" maxlength="140" />    
+            </fieldset>
+            <fieldset class="action">
+              <button class="btn btn-primary">Send</button>     
+            </fieldset>
+          </form>            
+        </div>           
+      </div>
+    </div>
+  </div>
+ 
+  <script>
+    var color_codes = {};
+    function stringToColorCode(str) {
+        return (str in color_codes) ? color_codes[str] : (color_codes[str] = '#'+ ('000000' + (Math.random()*0xFFFFFF<<0).toString(16)).slice(-6));
+    }
+    
+    function initialize() {
+      var socket = io();
+
+      var sendMessage = function(socket, message) {
+        var id = socket.json.id;
+        socket.emit('chat message', {
+          connectionId: id,
+          nickname: $("#nick").val(),
+          message: message
+        });         
+      }
+
+      $('form').submit(function (e) {
+        sendMessage(socket,$('#m').val());
+        $('#m').val('');
+        e.preventDefault();
+        return false; 
+      });      
+
+      socket.on('chat message', function (msg) {  
+        // Color the info icon based on the source instance id (web app instance id)
+        $('#messages-body').append('<tr>'+
+          '<td><span class="glyphicon glyphicon-info-sign" style="color:' + stringToColorCode(msg.sourceInstanceId) + ';" title="\n\nAzure Web App Instance Id:\t' + ( msg.sourceInstanceId || "n/a" ) + '\n\nSocket Session Id: ' + msg.connectionId + ' \n\n&nbsp;"></span></td>'+
+          '<td>' + msg.nickname + '</td>'+
+         '<td>' + msg.message + '</td>'+
+        '</tr>');
+        
+        // Scroll to latest message if needed 
+        $("#messages-container").animate({ scrollTop: $('#messages-container').prop("scrollHeight")}, 1000);
+      });
+      
+      socket.on('connect', function() {
+        sendMessage(socket, "Connected");
+      });
+      
+      socket.on('reconnect', function() {
+        sendMessage(socket, "Re-connected");        
+      });            
+    }
+        
+    $( document ).ready(function() {
+      initialize();
+    });
+  </script>
+
+
+</body>
+
+</html>
