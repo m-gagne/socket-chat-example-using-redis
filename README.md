@@ -11,7 +11,7 @@ This is a sample chat app based on the [Chat App tutorial](http://socket.io/get-
     
 ### Create an Azure Redis Cache
 
-Azure has a solid quick and easy [Getting Started](https://azure.microsoft.com/en-us/services/cache) document that shows you how to setup Redis Cache as an Azure PaaS service. If you don't yet have an Azure subscription you can always use the [free trial](https://azure.microsoft.com/en-us/pricing/free-trial/).
+Azure has a solid quick and easy [Getting Started](https://azure.microsoft.com/en-us/services/cache) document (see 'Create your first Redis cache') that shows you how to setup Redis Cache as an Azure PaaS service. If you don't yet have an Azure subscription you can always use the [free trial](https://azure.microsoft.com/en-us/pricing/free-trial/).
 
 ### Configure config.js
 
