@@ -8,7 +8,7 @@ var exphbs = require('express-handlebars');
 
 var redis = require("redis");
 
-// Redis requires one client for Subscribe commands, and another for Public commands
+// Redis requires one client for Subscribe commands, and another for Publish commands
 var subClient = redis.createClient(config.redis.port, config.redis.uri, {auth_pass: config.redis.key });
 var pubClient = redis.createClient(config.redis.port, config.redis.uri, {auth_pass: config.redis.key });
     
